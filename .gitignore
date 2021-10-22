@@ -130,3 +130,4 @@ dmypy.json
 /venv-fastapi/
 .idea/
 .idea
+/sql_app.db
