@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 
 from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
-
+from add_review_from_csv import set_review
 
 data = {
     'xLabel': 'X',
@@ -93,6 +93,12 @@ def create_item_for_user(
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     items = crud.get_items(db, skip=skip, limit=limit)
     return items
+
+
+@app.get("/review/")
+def add_review(db: Session = Depends(get_db)):
+    set_review(db)
+    return {'status': 'OK'}
 
 
 if __name__ == "__main__":

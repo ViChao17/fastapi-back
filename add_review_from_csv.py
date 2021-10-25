@@ -33,7 +33,7 @@ def set_review(db: Session):
         for i, item in en:
             if i % 1000 == 0:
                 print(f'{i/2520}%')
-            add_item(db, item)
+            add_item(db=db, item=item)
         print('--End--')
 
 
