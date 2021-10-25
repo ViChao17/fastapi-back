@@ -97,12 +97,18 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return items
 
 
-@app.get("/review/")
-def add_review(db: Session = Depends(get_db)):
-    thread = Thread(target=set_review, args=(db, ))
-    thread.start()
-    thread.join()
-    return {'status': 'OK'}
+@app.get("/review/", response_model=List[schemas.Review])
+def get_review(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    items = crud.get_review(db, skip=skip, limit=limit)
+    return items
+
+
+# @app.get("/review/")
+# def add_review(db: Session = Depends(get_db)):
+#     thread = Thread(target=set_review, args=(db, ))
+#     thread.start()
+#     thread.join()
+#     return {'status': 'OK'}
 
 
 if __name__ == "__main__":

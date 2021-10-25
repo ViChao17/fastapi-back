@@ -42,4 +42,4 @@ def set_review(db: Session):
 
 
 if __name__ == '__main__':
-    set_review(get_db())
+    set_review(Depends(get_db))
