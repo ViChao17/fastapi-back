@@ -10,6 +10,8 @@ from sqlalchemy.orm import Session
 from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
 from add_review_from_csv import set_review
+from threading import Thread
+
 
 data = {
     'xLabel': 'X',
@@ -97,7 +99,9 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @app.get("/review/")
 def add_review(db: Session = Depends(get_db)):
-    set_review(db)
+    thread = Thread(target=set_review, args=(db, ))
+    thread.start()
+    thread.join()
     return {'status': 'OK'}
 
 

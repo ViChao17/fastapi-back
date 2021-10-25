@@ -29,13 +29,17 @@ def set_review(db: Session):
     with open("bp-stats-review-2021-consolidated-dataset-narrow-format.csv", "r") as f:
         reader = csv.reader(f, delimiter=",")
         en = enumerate(reader)
-        print(en.__next__())
+        print('start!')
+        en.__next__()
         for i, item in en:
             if i % 1000 == 0:
                 print(f'{i/2520}%')
-            add_item(db=db, item=item)
+            try:
+                add_item(db=db, item=item)
+            except:
+                pass
         print('--End--')
 
 
 if __name__ == '__main__':
-    set_review(Depends(get_db))
+    set_review(get_db())
