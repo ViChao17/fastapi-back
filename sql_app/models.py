@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
 from sqlalchemy.orm import relationship
 
 from .database import Base
@@ -24,3 +24,18 @@ class Item(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="items")
+
+
+class Review(Base):
+    __tablename__ = "review"
+
+    Country = Column(String, index=True)
+    Year = Column(Integer, index=True)
+    Region = Column(String, index=True)
+    SubRegion = Column(String, index=True)
+    OPEC = Column(Boolean, default=False)
+    EU = Column(Boolean, default=False)
+    OECD = Column(Boolean, default=False)
+    CIS = Column(Boolean, default=False)
+    Var = Column(String, index=True)
+    Value = Column(Float)
