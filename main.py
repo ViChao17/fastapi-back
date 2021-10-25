@@ -11,6 +11,7 @@ from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
 from add_review_from_csv import set_review
 from threading import Thread
+from typing import Optional
 
 
 data = {
@@ -98,10 +99,18 @@ def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 
 @app.get("/review/", response_model=List[schemas.Review])
-def get_review(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    items = crud.get_review(db, skip=skip, limit=limit)
+def get_review(skip: int = 0, limit: int = 100, var: Optional[str] = None, db: Session = Depends(get_db)):
+    if var:
+        items = crud.get_review_by_var(db, skip=skip, limit=limit, var=var)
+    else:
+        items = crud.get_review(db, skip=skip, limit=limit)
     return items
 
+
+@app.get("/review/{var}", response_model=List[schemas.Review])
+def get_review_by_var(skip: int = 0, limit: int = 100, var: str = '', db: Session = Depends(get_db)):
+    items = crud.get_review_by_var(db, skip=skip, limit=limit, var=var)
+    return items
 
 # @app.get("/review/")
 # def add_review(db: Session = Depends(get_db)):

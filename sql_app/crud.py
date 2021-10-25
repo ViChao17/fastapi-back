@@ -38,3 +38,7 @@ def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
 
 def get_review(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Review).offset(skip).limit(limit).all()
+
+
+def get_review_by_var(db: Session, skip: int = 0, limit: int = 100, var: str = ''):
+    return db.query(models.Review).filter(models.Review.Var == var).offset(skip).limit(limit).all()
