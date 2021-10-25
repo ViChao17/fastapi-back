@@ -20,7 +20,7 @@ def add_item(db: Session, item):
 
 
 def set_review(db: Session):
-    with open("test.csv", "r") as f:
+    with open("bp-stats-review-2021-consolidated-dataset-narrow-format.csv", "r") as f:
         reader = csv.reader(f, delimiter=",")
         en = enumerate(reader)
         print(en.__next__())

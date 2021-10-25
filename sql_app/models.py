@@ -29,6 +29,7 @@ class Item(Base):
 class Review(Base):
     __tablename__ = "review"
 
+    id = Column(Integer, primary_key=True, index=True)
     Country = Column(String, index=True)
     Year = Column(Integer, index=True)
     Region = Column(String, index=True)
