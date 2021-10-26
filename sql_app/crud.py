@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
-
+from sqlalchemy.orm.query import Query
 from . import models, schemas
+
+from typing import Optional
 
 
 def get_user(db: Session, user_id: int):
@@ -42,3 +44,30 @@ def get_review(db: Session, skip: int = 0, limit: int = 100):
 
 def get_review_by_var(db: Session, skip: int = 0, limit: int = 100, var: str = ''):
     return db.query(models.Review).filter(models.Review.Var == var).offset(skip).limit(limit).all()
+
+
+params = ['Country', 'Year', 'Region', 'SubRegion', 'OPEC', 'EU', 'OECD', 'CIS', 'Var', 'Value']
+
+
+def get_full_review_by_region(db: Session, region: list, year: Optional[dict] = None, var: Optional[list] = None):
+    pass
+
+
+def get_full_review_by_subregion(db: Session, subregion: list, year: Optional[dict] = None, var: Optional[list] = None):
+    pass
+
+
+def get_full_review_by_int_org(db: Session, int_org: dict, year: Optional[dict] = None, var: Optional[list] = None):
+    pass
+
+
+def get_full_world_review_by_var(db: Session, var: list, year: Optional[dict] = None):
+    pass
+
+
+def get_full_review_by_country(db: Session, country: list, year: Optional[dict] = None, var: Optional[list] = None):
+    items: Query = db.query(models.Review).filter(models.Review.Country == 'Algeria')
+    items = items.filter(models.Review.Year == 1973)
+    items = items.filter(models.Review.Var == 'co2_mtco2')
+    return items.all()
+

@@ -112,6 +112,11 @@ def get_review_by_var(skip: int = 0, limit: int = 100, var: str = '', db: Sessio
     items = crud.get_review_by_var(db, skip=skip, limit=limit, var=var)
     return items
 
+
+@app.get("/test/")
+def get_test(db: Session = Depends(get_db)):
+    return crud.get_full_review_by_country(db=db, country=[])
+
 # @app.get("/review/")
 # def add_review(db: Session = Depends(get_db)):
 #     thread = Thread(target=set_review, args=(db, ))
