@@ -66,7 +66,7 @@ def get_full_world_review_by_var(db: Session, var: list, year: Optional[dict] = 
 
 
 def get_full_review_by_country(db: Session, country: list, year: Optional[dict] = None, var: Optional[list] = None):
-    items: Query = db.query(models.Review).filter(models.Review.Country == 'Algeria')
+    items: Query = db.query(models.Review).filter(models.Review.Country.in_(['Algeria', 'Vietnam']))
     items = items.filter(models.Review.Year == 1973)
     items = items.filter(models.Review.Var == 'co2_mtco2')
     return items.all()
