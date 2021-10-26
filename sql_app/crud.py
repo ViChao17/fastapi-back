@@ -50,24 +50,56 @@ params = ['Country', 'Year', 'Region', 'SubRegion', 'OPEC', 'EU', 'OECD', 'CIS',
 
 
 def get_full_review_by_region(db: Session, region: list, year: Optional[dict] = None, var: Optional[list] = None):
-    pass
+    items: Query = db.query(models.Review).filter(models.Review.Region.in_(region))
+    if year:
+        items = year_comparison_review(items, year)
+    if var:
+        items = items.filter(models.Review.Var.in_(var))
+    return items.all()
 
 
 def get_full_review_by_subregion(db: Session, subregion: list, year: Optional[dict] = None, var: Optional[list] = None):
-    pass
+    items: Query = db.query(models.Review).filter(models.Review.SubRegion.in_(subregion))
+    if year:
+        items = year_comparison_review(items, year)
+    if var:
+        items = items.filter(models.Review.Var.in_(var))
+    return items.all()
 
 
 def get_full_review_by_int_org(db: Session, int_org: dict, year: Optional[dict] = None, var: Optional[list] = None):
-    pass
+    items: Query = db.query(models.Review).filter()     # сложные условия
+    if year:
+        items = year_comparison_review(items, year)
+    if var:
+        items = items.filter(models.Review.Var.in_(var))
+    return items.all()
 
 
 def get_full_world_review_by_var(db: Session, var: list, year: Optional[dict] = None):
-    pass
+    return {}
 
 
 def get_full_review_by_country(db: Session, country: list, year: Optional[dict] = None, var: Optional[list] = None):
-    items: Query = db.query(models.Review).filter(models.Review.Country.in_(['Algeria', 'Vietnam']))
-    items = items.filter(models.Review.Year == 1973)
-    items = items.filter(models.Review.Var == 'co2_mtco2')
+    items: Query = db.query(models.Review).filter(models.Review.Country.in_(country))
+    if year:
+        items = year_comparison_review(items, year)
+    if var:
+        items = items.filter(models.Review.Var.in_(var))
     return items.all()
 
+
+def year_comparison_review(items: Query, year: dict) -> Query:
+    current_year = list(year.keys())[0]
+    condition = year[current_year]
+    if condition == 'more':
+        return items.filter(models.Review.Year > current_year)
+    if condition == 'less':
+        return items.filter(models.Review.Year < current_year)
+    if condition == 'equal':
+        return items.filter(models.Review.Year == current_year)
+    if condition == 'more_or_equal':
+        return items.filter(models.Review.Year >= current_year)
+    if condition == 'less_or_equal':
+        return items.filter(models.Review.Year <= current_year)
+    return items

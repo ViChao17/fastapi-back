@@ -115,7 +115,7 @@ def get_review_by_var(skip: int = 0, limit: int = 100, var: str = '', db: Sessio
 
 @app.get("/test/")
 def get_test(db: Session = Depends(get_db)):
-    return crud.get_full_review_by_country(db=db, country=[])
+    return crud.get_full_review_by_country(db=db, country=['Algeria'], year={1970: 'less_or_equal'}, var=['co2_mtco2'])
 
 # @app.get("/review/")
 # def add_review(db: Session = Depends(get_db)):
