@@ -68,7 +68,7 @@ def get_full_review_by_subregion(db: Session, subregion: list, year: Optional[di
 
 
 def get_full_review_by_int_org(db: Session, int_org: dict, year: Optional[dict] = None, var: Optional[list] = None):
-    items: Query = db.query(models.Review).filter()     # сложные условия
+    items: Query = db.query(models.Review).filter(in_org(int_org))
     if year:
         items = year_comparison_review(items, year)
     if var:
@@ -77,7 +77,10 @@ def get_full_review_by_int_org(db: Session, int_org: dict, year: Optional[dict] 
 
 
 def get_full_world_review_by_var(db: Session, var: list, year: Optional[dict] = None):
-    return {}
+    items: Query = db.query(models.Review).filter(models.Review.Var.in_(var))
+    if year:
+        items = year_comparison_review(items, year)
+    return items
 
 
 def get_full_review_by_country(db: Session, country: list, year: Optional[dict] = None, var: Optional[list] = None):
@@ -103,3 +106,16 @@ def year_comparison_review(items: Query, year: dict) -> Query:
     if condition == 'less_or_equal':
         return items.filter(models.Review.Year <= current_year)
     return items
+
+
+def in_org(int_org: dict) -> bool:
+    for key in int_org.keys():
+        if key == 'CIS' and models.Review.CIS and int_org[key]:
+            return True
+        if key == 'EU' and models.Review.EU and int_org[key]:
+            return True
+        if key == 'OECD' and models.Review.OECD and int_org[key]:
+            return True
+        if key == 'OPEC' and models.Review.OPEC and int_org[key]:
+            return True
+    return False
