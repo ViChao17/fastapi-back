@@ -52,3 +52,9 @@ class Review(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class TestItem(BaseModel):
+    id: int
+    title: str
+    description: str

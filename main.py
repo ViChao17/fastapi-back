@@ -12,6 +12,8 @@ from sql_app.database import SessionLocal, engine
 from add_review_from_csv import set_review
 from threading import Thread
 from typing import Optional
+from fastapi.encoders import jsonable_encoder
+import json
 
 
 data = {
@@ -116,6 +118,47 @@ def get_review_by_var(skip: int = 0, limit: int = 100, var: str = '', db: Sessio
 @app.get("/test/")
 def get_test(db: Session = Depends(get_db)):
     return crud.get_full_review_by_country(db=db, country=['Algeria'], year={1970: 'less_or_equal'}, var=['co2_mtco2'])
+
+
+@app.get("/testitem/")
+def test_item(item: str, db: Session = Depends(get_db)):
+    item_out_python = json.JSONDecoder().decode(item)
+    type_chart = item_out_python['type']
+    return {'type': type_chart}
+
+
+@app.get("/region/")
+def region(item: str, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(item), [])
+
+
+@app.get("/subregion/")
+def subregion(item: str, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(item), [])
+
+
+@app.get("/var/")
+def var(item: str, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(item), [])
+
+
+@app.get("/int_org/")
+def int_org(item: str, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(item), [])
+
+
+@app.get("/country/")
+def country(item: str, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(item), [])
+
+
+def set_to_stat(rule: dict, item_set: List[schemas.Review]):
+    type_chart: str = rule['type']
+    discrete: bool = rule['discrete']
+    x_field = rule['x_field']
+    y_field = rule['y_field']
+
+    return {}
 
 # @app.get("/review/")
 # def add_review(db: Session = Depends(get_db)):
