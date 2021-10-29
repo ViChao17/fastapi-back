@@ -128,28 +128,28 @@ def test_item(item: str, db: Session = Depends(get_db)):
 
 
 @app.get("/region/")
-def region(item: str, db: Session = Depends(get_db)):
-    return set_to_stat(json.JSONDecoder().decode(item), [])
+def region(rule: str, region: list, year: Optional[dict] = None, var: Optional[list] = None, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
 @app.get("/subregion/")
-def subregion(item: str, db: Session = Depends(get_db)):
-    return set_to_stat(json.JSONDecoder().decode(item), [])
+def subregion(rule: str, subregion: list, year: Optional[dict] = None, var: Optional[list] = None, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
 @app.get("/var/")
-def var(item: str, db: Session = Depends(get_db)):
-    return set_to_stat(json.JSONDecoder().decode(item), [])
+def var(rule: str, var: list, year: Optional[dict] = None, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
 @app.get("/int_org/")
-def int_org(item: str, db: Session = Depends(get_db)):
-    return set_to_stat(json.JSONDecoder().decode(item), [])
+def int_org(rule: str, int_org: dict, year: Optional[dict] = None, var: Optional[list] = None, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
 @app.get("/country/")
-def country(item: str, db: Session = Depends(get_db)):
-    return set_to_stat(json.JSONDecoder().decode(item), [])
+def country(rule: str, country: list, year: Optional[dict] = None, var: Optional[list] = None, db: Session = Depends(get_db)):
+    return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
 def set_to_stat(rule: dict, item_set: List[schemas.Review]):
