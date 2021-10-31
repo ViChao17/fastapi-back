@@ -167,12 +167,43 @@ def country(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db
 
 
 def set_to_stat(rule: dict, item_set: List[schemas.Review]):
-    type_chart: str = rule.get('type')
+    type_chart: str | None = rule.get('type')
     discrete: bool = rule.get('discrete')
     x_field = rule.get('x_field')
     y_field = rule.get('y_field')
 
-    return item_set
+    series: dict = {'series': [{
+        'type': 'line',
+        'data': [
+            {
+                'x': 0,
+                'y': 0
+            },
+            {
+                'x': 1,
+                'y': 2
+            }
+        ]
+    }]
+    }
+    if type_chart:
+        series['series'][0]['name'] = 'Success'
+        series['series'][0]['type'] = type_chart
+        stat_data: list = []
+        for item in item_set:
+            year = getattr(item, x_field)
+            value = getattr(item, y_field)
+            stat_data.append(
+                {
+                    'x': year,
+                    'y': value
+                }
+            )
+        series['series'][0]['data'] = stat_data
+    else:
+        series['series'][0]['name'] = 'Error'
+
+    return series
 
 
 # @app.get("/review/")
