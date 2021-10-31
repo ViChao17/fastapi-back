@@ -148,7 +148,11 @@ def int_org(rule: str, int_org: dict, year: Optional[dict] = None, var: Optional
 
 
 @app.get("/country/")
-def country(rule: str, country: list, year: Optional[dict] = None, var: Optional[list] = None, db: Session = Depends(get_db)):
+def country(rule: str, filters: Optional[str] = None, db: Session = Depends(get_db)):
+    print('---')
+    print(json.JSONDecoder().decode(rule))
+    print(json.JSONDecoder().decode(filters))
+    print('---')
     return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
