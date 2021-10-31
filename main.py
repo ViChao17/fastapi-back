@@ -128,41 +128,52 @@ def test_item(item: str, db: Session = Depends(get_db)):
 
 
 @app.get("/region/")
-def region(rule: str, region: list, year: Optional[dict] = None, var: Optional[list] = None, db: Session = Depends(get_db)):
+def region(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db)):
+    filters_dict: dict = json.JSONDecoder().decode(filters)
+    items = crud.get_full_review_by_region(db=db, region=filters_dict.get('region', []),
+                                            year=filters_dict.get('year'), var=filters_dict.get('var'))
     return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
 @app.get("/subregion/")
-def subregion(rule: str, subregion: list, year: Optional[dict] = None, var: Optional[list] = None, db: Session = Depends(get_db)):
+def subregion(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db)):
+    filters_dict: dict = json.JSONDecoder().decode(filters)
+    items = crud.get_full_review_by_subregion(db=db, subregion=filters_dict.get('subregion', []),
+                                            year=filters_dict.get('year'), var=filters_dict.get('var'))
     return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
 @app.get("/var/")
-def var(rule: str, var: list, year: Optional[dict] = None, db: Session = Depends(get_db)):
+def var(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db)):
+    filters_dict: dict = json.JSONDecoder().decode(filters)
+    items = crud.get_full_world_review_by_var(db=db, year=filters_dict.get('year'), var=filters_dict.get('var'))
     return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
 @app.get("/int_org/")
-def int_org(rule: str, int_org: dict, year: Optional[dict] = None, var: Optional[list] = None, db: Session = Depends(get_db)):
+def int_org(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db)):
+    filters_dict: dict = json.JSONDecoder().decode(filters)
+    items = crud.get_full_review_by_int_org(db=db, int_org=filters_dict.get('int_org', []),
+                                            year=filters_dict.get('year'), var=filters_dict.get('var'))
     return set_to_stat(json.JSONDecoder().decode(rule), [])
 
 
 @app.get("/country/")
-def country(rule: str, filters: Optional[str] = None, db: Session = Depends(get_db)):
-    print('---')
-    print(json.JSONDecoder().decode(rule))
-    print(json.JSONDecoder().decode(filters))
-    print('---')
-    return set_to_stat(json.JSONDecoder().decode(rule), [])
+def country(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db)):
+    filters_dict: dict = json.JSONDecoder().decode(filters)
+    items = crud.get_full_review_by_country(db=db, country=filters_dict.get('country', []),
+                                            year=filters_dict.get('year'), var=filters_dict.get('var'))
+    return set_to_stat(json.JSONDecoder().decode(rule), items)
 
 
 def set_to_stat(rule: dict, item_set: List[schemas.Review]):
-    type_chart: str = rule['type']
-    discrete: bool = rule['discrete']
-    x_field = rule['x_field']
-    y_field = rule['y_field']
+    type_chart: str = rule.get('type')
+    discrete: bool = rule.get('discrete')
+    x_field = rule.get('x_field')
+    y_field = rule.get('y_field')
 
-    return {}
+    return item_set
+
 
 # @app.get("/review/")
 # def add_review(db: Session = Depends(get_db)):

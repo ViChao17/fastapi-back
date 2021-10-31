@@ -93,8 +93,8 @@ def get_full_review_by_country(db: Session, country: list, year: Optional[dict] 
 
 
 def year_comparison_review(items: Query, year: dict) -> Query:
-    current_year = list(year.keys())[0]
-    condition = year[current_year]
+    current_year = int(list(year.keys())[0])
+    condition = year[str(current_year)]
     if condition == 'more':
         return items.filter(models.Review.Year > current_year)
     if condition == 'less':
