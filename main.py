@@ -132,7 +132,7 @@ def region(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db)
     filters_dict: dict = json.JSONDecoder().decode(filters)
     items = crud.get_full_review_by_region(db=db, region=filters_dict.get('region', []),
                                             year=filters_dict.get('year'), var=filters_dict.get('var'))
-    return set_to_stat(json.JSONDecoder().decode(rule), [])
+    return set_to_stat(json.JSONDecoder().decode(rule), items)
 
 
 @app.get("/subregion/")
@@ -140,14 +140,14 @@ def subregion(rule: str, filters: Optional[str] = '', db: Session = Depends(get_
     filters_dict: dict = json.JSONDecoder().decode(filters)
     items = crud.get_full_review_by_subregion(db=db, subregion=filters_dict.get('subregion', []),
                                             year=filters_dict.get('year'), var=filters_dict.get('var'))
-    return set_to_stat(json.JSONDecoder().decode(rule), [])
+    return set_to_stat(json.JSONDecoder().decode(rule), items)
 
 
 @app.get("/var/")
 def var(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db)):
     filters_dict: dict = json.JSONDecoder().decode(filters)
     items = crud.get_full_world_review_by_var(db=db, year=filters_dict.get('year'), var=filters_dict.get('var'))
-    return set_to_stat(json.JSONDecoder().decode(rule), [])
+    return set_to_stat(json.JSONDecoder().decode(rule), items)
 
 
 @app.get("/int_org/")
@@ -155,7 +155,7 @@ def int_org(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db
     filters_dict: dict = json.JSONDecoder().decode(filters)
     items = crud.get_full_review_by_int_org(db=db, int_org=filters_dict.get('int_org', []),
                                             year=filters_dict.get('year'), var=filters_dict.get('var'))
-    return set_to_stat(json.JSONDecoder().decode(rule), [])
+    return set_to_stat(json.JSONDecoder().decode(rule), items)
 
 
 @app.get("/country/")
@@ -168,11 +168,9 @@ def country(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db
 
 def set_to_stat(rule: dict, item_set: List[schemas.Review]):
     type_chart: str | None = rule.get('type')
-    discrete: bool = rule.get('discrete')
     x_field = rule.get('x_field')
-    y_field = rule.get('y_field')
 
-    series: dict = {'series': [{
+    series = [{
         'type': 'line',
         'data': [
             {
@@ -185,25 +183,31 @@ def set_to_stat(rule: dict, item_set: List[schemas.Review]):
             }
         ]
     }]
-    }
+
     if type_chart:
-        series['series'][0]['name'] = 'Success'
-        series['series'][0]['type'] = type_chart
+        series[0]['name'] = x_field
+        series[0]['type'] = type_chart
         stat_data: list = []
-        for item in item_set:
-            year = getattr(item, x_field)
-            value = getattr(item, y_field)
+        data_set = param_value(x_field, item_set)
+        for key in data_set:
             stat_data.append(
                 {
-                    'x': year,
-                    'y': value
+                    'x': key,
+                    'y': data_set[key]
                 }
             )
-        series['series'][0]['data'] = stat_data
+        series[0]['data'] = stat_data
     else:
-        series['series'][0]['name'] = 'Error'
-
+        series[0]['name'] = 'Error'
+#
     return series
+
+
+def param_value(param: str, item_set: List[schemas.Review]):    # param = Year | Var
+    data_set = {}
+    for item in item_set:
+        data_set[getattr(item, param)] = data_set.get(getattr(item, param), 0) + item.Value
+    return data_set
 
 
 # @app.get("/review/")

@@ -1,9 +1,9 @@
 # fastapi-back
 backend для теста
 
-{"type": "pie", "discrete": true, "x_field": "namex1", "y_field": "namey1"}
+{"type": "pie", "x_field": "namex1"}
 
-{"type": "line", "discrete": true, "x_field": "Year", "y_field": "Value"}
+{"type": "line", "x_field": "Year"}
 
 {"int_org":{} | "country | region | subregion": ["c1"], "year": {"1970": "more"}, "var": ["v1"]} 
 
