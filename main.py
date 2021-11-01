@@ -110,14 +110,23 @@ def set_to_stat(rule: dict, item_set: List[schemas.Review]):
         series[0]['type'] = type_chart
         stat_data: list = []
         data_set = param_value(x_field, item_set)
+        point_start = None
         for key in data_set:
-            stat_data.append(
-                {
-                    'x': key,
-                    'y': data_set[key]
-                }
-            )
+            if str(key).isdigit():
+                if not point_start:
+                    point_start = float(key)
+                else:
+                    if float(key) < point_start:
+                        point_start = float(key)
+            stat_item = {'y': data_set[key]}
+            if type_chart == 'column':
+                stat_item['name'] = key
+            else:
+                stat_item['x'] = key
+            stat_data.append(stat_item)
         series[0]['data'] = stat_data
+        if point_start:
+            series[0]['pointStart'] = point_start
     else:
         series[0]['name'] = 'Error'
 #
