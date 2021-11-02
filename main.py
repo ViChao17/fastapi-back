@@ -147,6 +147,8 @@ def set_to_stat(rule: dict, item_set: List[schemas.Review]):
         series[0]['data'] = stat_data
         if point_start:
             series[0]['pointStart'] = point_start
+        if x_field == 'Var':
+            series[0]['pointStart'] = 0
     else:
         series[0]['name'] = 'Error'
 #
