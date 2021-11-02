@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, load_only
 from sqlalchemy.orm.query import Query
 from . import models, schemas
 
@@ -86,3 +86,44 @@ def in_org(int_org: dict) -> bool:
         if key == 'OPEC' and models.Review.OPEC and int_org[key]:
             return True
     return False
+
+
+def get_all_var(db: Session):
+    variables = db.query(models.Review).filter(models.Review.Year == 2000).filter(models.Review.Country == 'Argentina').\
+        options(load_only("Var")).distinct().all()
+
+    result = []
+    for v in variables:
+        if not(v.Var in result):
+            result.append(v.Var)
+    return result
+
+
+def get_all_country(db: Session):
+    co = db.query(models.Review).filter(models.Review.Year == 2000).options(load_only("Country")).distinct().all()
+
+    result = []
+    for c in co:
+        if not (c.Country in result):
+            result.append(c.Country)
+    return result
+
+
+def get_all_region(db: Session):
+    re = db.query(models.Review).filter(models.Review.Year == 2000).options(load_only("Region")).distinct().all()
+
+    result = []
+    for r in re:
+        if not (r.Region in result):
+            result.append(r.Region)
+    return result
+
+
+def get_all_subregion(db: Session):
+    re = db.query(models.Review).filter(models.Review.Year == 2000).options(load_only("SubRegion")).distinct().all()
+
+    result = []
+    for r in re:
+        if not (r.SubRegion in result):
+            result.append(r.SubRegion)
+    return result

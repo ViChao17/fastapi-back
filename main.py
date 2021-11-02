@@ -87,6 +87,26 @@ def country(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db
     return set_to_stat(json.JSONDecoder().decode(rule), items)
 
 
+@app.get("/values/")
+def values(db: Session = Depends(get_db)):
+    return crud.get_all_var(db)
+
+
+@app.get("/all_country/")
+def all_country(db: Session = Depends(get_db)):
+    return crud.get_all_country(db)
+
+
+@app.get("/all_region/")
+def all_region(db: Session = Depends(get_db)):
+    return crud.get_all_region(db)
+
+
+@app.get("/all_subregion/")
+def all_subregion(db: Session = Depends(get_db)):
+    return crud.get_all_subregion(db)
+
+
 def set_to_stat(rule: dict, item_set: List[schemas.Review]):
     type_chart: str | None = rule.get('type')
     x_field = rule.get('x_field')
