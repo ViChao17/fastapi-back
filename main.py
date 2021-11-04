@@ -87,8 +87,8 @@ def country(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db
     return set_to_stat(json.JSONDecoder().decode(rule), items)
 
 
-@app.get("/values/")
-def values(db: Session = Depends(get_db)):
+@app.get("/variables/")
+def variables(db: Session = Depends(get_db)):
     return crud.get_all_var(db)
 
 
