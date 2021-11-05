@@ -130,5 +130,5 @@ dmypy.json
 /venv-fastapi/
 .idea/
 .idea
-/sql_app.db
+/sql_app_copy.db
 /bp-stats-review-2021-consolidated-dataset-narrow-format.csv
