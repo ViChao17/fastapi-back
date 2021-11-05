@@ -132,3 +132,4 @@ dmypy.json
 .idea
 /sql_app_copy.db
 /bp-stats-review-2021-consolidated-dataset-narrow-format.csv
+/sql_app.db

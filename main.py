@@ -162,13 +162,5 @@ def param_value(param: str, item_set: List[schemas.Review]):    # param = Year |
     return data_set
 
 
-# @app.get("/review/")
-# def add_review(db: Session = Depends(get_db)):
-#     thread = Thread(target=set_review, args=(db, ))
-#     thread.start()
-#     thread.join()
-#     return {'status': 'OK'}
-
-
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8000)
