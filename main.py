@@ -74,7 +74,7 @@ def var(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db)):
 @app.get("/int_org/")
 def int_org(rule: str, filters: Optional[str] = '', db: Session = Depends(get_db)):
     filters_dict: dict = json.JSONDecoder().decode(filters)
-    items = crud.get_full_review_by_int_org(db=db, int_org=filters_dict.get('int_org', []),
+    items = crud.get_full_review_by_int_org(db=db, int_org=filters_dict.get('int_org', {}),
                                             year=filters_dict.get('year'), var=filters_dict.get('var'))
     return set_to_stat(json.JSONDecoder().decode(rule), items)
 
