@@ -3,13 +3,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from typing import List
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 
 from sql_app import crud, models, schemas
 from sql_app.database import SessionLocal, engine
-from add_review_from_csv import set_review
-from threading import Thread
 from typing import Optional
 import json
 
